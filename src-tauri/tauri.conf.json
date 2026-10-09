@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Shalaghi",
+  "version": "0.1.0",
+  "identifier": "com.shalaghi.app",
+  "build": {
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Shalaghi",
+        "width": 440,
+        "height": 800,
+        "minWidth": 320,
+        "minHeight": 560,
+        "transparent": true,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "resizable": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "deb"],
+    "category": "Utility",
+    "shortDescription": "Whip overlay + faster prompt booster for any AI agent",
+    "longDescription": "Shalaghi is a desktop overlay: a physics whip for fun plus one-click faster-style prompt boosters that paste into any AI coding agent."
+  }
+}

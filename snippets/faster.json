@@ -1,0 +1,22 @@
+[
+  {
+    "id": "fast",
+    "title": "fast",
+    "text": "Be terse. Shortest correct answer. No preamble, no summary."
+  },
+  {
+    "id": "fast-fix",
+    "title": "fast-fix",
+    "text": "Fix it. Code only, no explanation."
+  },
+  {
+    "id": "fast-view",
+    "title": "fast-view",
+    "text": "Review: blocking issues only. One line each."
+  },
+  {
+    "id": "fast-ship",
+    "title": "fast-ship",
+    "text": "Ship it: minimal diff that works. Skip edge cases unless asked."
+  }
+]

@@ -1,0 +1,384 @@
+:root {
+  color-scheme: dark;
+  --bg: rgba(18, 18, 22, 0.92);
+  --panel: rgba(30, 30, 38, 0.95);
+  --text: #f2f2f5;
+  --muted: #a8a8b5;
+  --accent: #e5484d;
+  --ok: #46c98a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: "Segoe UI", Tahoma, system-ui, sans-serif;
+  user-select: none;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+#app {
+  width: min(1060px, 100%);
+  min-height: calc(100vh - 32px);
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+header.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header.app-header h1 {
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Full-page whip arena: the whip is playable across the whole area. */
+.whip-stage {
+  background: var(--panel);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  flex: 1 1 auto;
+  min-height: 420px;
+}
+
+.whip-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  cursor: grab;
+}
+
+.whip-stage canvas:active {
+  cursor: grabbing;
+}
+
+.crack-counter {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.crack-counter.bump {
+  animation: counter-bump 0.3s ease-out;
+}
+
+@keyframes counter-bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+    color: var(--accent);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Floating shout words above the impact point. */
+.shout {
+  position: absolute;
+  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 5;
+  animation: shout-float 1.2s ease-out forwards;
+}
+
+.shout strong {
+  font-size: 22px;
+  color: #fff;
+  text-shadow:
+    0 0 8px var(--accent),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+.shout span {
+  font-size: 12px;
+  color: var(--muted);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes shout-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(0.8) rotate(-3deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1.1) rotate(2deg);
+  }
+  30% {
+    transform: translate(-50%, -8px) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -72px) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shout,
+  .toast.show,
+  .demo-bubble,
+  .crack-counter.bump {
+    animation: none;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #2a2a34;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #343442;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.lang-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lang-toggle button {
+  border: 0;
+  border-radius: 0;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.lang-toggle button.active {
+  background: var(--accent);
+  font-weight: 600;
+}
+
+.panels {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panel {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.panel-head {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.snippet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.snippet-item {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.snippet-item strong {
+  font-size: 13px;
+}
+
+.snippet-item span {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Demo agent preview (web only, replies are simulated). */
+.demo-chat {
+  flex: 1 1 300px;
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+}
+
+.demo-chat-head {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #06130c;
+  background: var(--ok);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.demo-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  min-height: 80px;
+}
+
+.demo-bubble {
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 7px 10px;
+  max-width: 92%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: bubble-in 0.25s ease-out;
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.demo-user {
+  align-self: flex-end;
+  background: #3b2b2e;
+  border: 1px solid var(--accent);
+}
+
+.demo-agent {
+  align-self: flex-start;
+  background: #23232c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toggles {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toggles label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toast {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ok);
+  color: #06130c;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  animation: toast-pop 0.25s ease-out;
+}
+
+@keyframes toast-pop {
+  0% {
+    transform: translateX(-50%) scale(0.9);
+  }
+  60% {
+    transform: translateX(-50%) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.toast.error {
+  background: var(--accent);
+  color: #fff;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}

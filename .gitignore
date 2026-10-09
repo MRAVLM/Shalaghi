@@ -1,0 +1,30 @@
+# Local tool state
+.freebuff/
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+
+# Build output (regenerable via `npm run build`)
+dist/
+
+# Compiled test helper (regenerable via `npm run pretest`)
+.test-tmp/
+
+# Rust build output (GBs, regenerable via `npm run tauri build`)
+src-tauri/target/
+
+# Tauri generated schemas (regenerable at build time)
+src-tauri/gen/
+
+# Local Windows SDK/CRT sysroot for user-space builds (GBs, see README note)
+.xwin/
+.xwin-cache/
+
+# Python bytecode
+__pycache__/
