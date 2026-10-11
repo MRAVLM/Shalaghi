@@ -12,6 +12,11 @@ on:
 
 jobs:
   build:
+    # The tauri-action step creates/updates the draft GitHub Release, which
+    # needs write access: without this the job fails at the very end with
+    # "Resource not accessible by integration" (default token is read-only).
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -23,10 +28,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
@@ -54,4 +59,6 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "Shalaghi ${{ github.ref_name }}"
           releaseDraft: true
-          bundle: ${{ matrix.bundles }}
+          # tauri-action has no `bundle` input (it warns "Unexpected input");
+          # CLI flags go through `args` instead.
+          args: --bundles ${{ matrix.bundles }}
